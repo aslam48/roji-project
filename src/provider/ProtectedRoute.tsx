@@ -10,7 +10,7 @@ interface Props {
 const ProtectedRoute: React.FC<Props> = (props: Props) => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.Auth.isLoggedIn);
-  const userToken = localStorage.getItem("admin_token");
+  const userToken = localStorage.getItem("user_token");
 
   if (isLoggedIn && userToken) {
     return <>{props.component}</>;
