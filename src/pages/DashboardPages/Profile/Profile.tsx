@@ -3,7 +3,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import UploadImgIcon from "../../../assets/uploadInage.svg";
 import CustomInput from "../../../component/Frominput/CustomInput";
 import { useAppSelector } from "../../../redux/Store";
-import { getCollector, personalProfile, profilePic } from "../../../services/api/profile";
+import { getCollector, personalProfile } from "../../../services/api/profile";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { UpdateProfileForm } from "../../../interfaces/postinterface";
 import Spinner from "../../../component/Spinner";
@@ -57,26 +57,25 @@ const Profile: React.FC = () => {
     };
     
 
-    const handleSubmitData = async (values: UpdateProfileForm) => {
-        setIsSaving(true);
-        // If avatar is selected, upload it first
-        if (avatar) {
-            const formData = new FormData();
-            formData.append('avatar', avatar);
+    // const handleSubmitData = async (values: UpdateProfileForm) => {
+    //     setIsSaving(true);
+    //     if (avatar) {
+    //         const formData = new FormData();
+    //         formData.append('avatar', avatar);
 
-            try {
-                await profilePic(formData);
-            } catch (error) {
-                console.error('Failed to upload avatar:', error);
-                toast.error('Failed to upload avatar');
-                setIsSaving(false);
-                return;
-            }
-        }
+    //         try {
+    //             await profilePic(formData);
+    //         } catch (error) {
+    //             console.error('Failed to upload avatar:', error);
+    //             toast.error('Failed to upload avatar');
+    //             setIsSaving(false);
+    //             return;
+    //         }
+    //     }
 
-        // Then proceed to update profile details
-        mutation.mutate(values);
-    };
+    //     // Then proceed to update profile details
+    //     mutation.mutate(values);
+    // };
 
 
     if (isError) return <div>Error loading profile data</div>;
@@ -122,6 +121,8 @@ const Profile: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
+
+                                  
                                      <div className="flex justify-center items-center flex-grow">
                                         {avatar ? (
                                             <img
@@ -136,6 +137,14 @@ const Profile: React.FC = () => {
                                                 className="w-[120px] h-[120px] rounded-full object-cover"
                                             />
                                         )}
+                                          <input
+                                            type="file"
+                                            id="image"
+                                            name="image"
+                                            accept=".jpg, .png, .jpeg"
+                                            className="hidden"
+                                            onChange={handleFileChange}
+                                        />
                                     </div>
                                 </div>
 
