@@ -39,7 +39,7 @@ const Profile: React.FC = () => {
                                                 <label
                                                     htmlFor="image"
                                                     className="text-[#5F9A3A] font-semibold"
-                                                >
+                                               >
                                                     Change Photo
                                                 </label>
                                             </div>
