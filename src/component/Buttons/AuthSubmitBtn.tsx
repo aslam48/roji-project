@@ -27,8 +27,8 @@ const AuthSubmitBtn: React.FC<AuthSubmitBtnProps> = ({
         onClick={handleClick}
         className={`w-full bg-secondaryColor rounded-lg flex items-center justify-center text-white py-2 ${
           !isValid
-            ? "bg-[#5F9A3A] text-white opacity-40 font-semibold cursor-not-allowed"
-            : "bg-[#5F9A3A] text-white font-semibold "
+            ? "bg-[#3a35c4] text-white opacity-40 font-semibold cursor-not-allowed"
+            : "bg-[#3a35c4] text-white font-semibold "
         }`}
         disabled={!isValid || isLoading}
       >

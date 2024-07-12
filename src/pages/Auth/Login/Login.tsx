@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import FormInput from '../../../component/Frominput/FromInput'
 import useLoginForm from '../../../component/Frominput/formik/useLoginForm'
 import { isAxiosError } from 'axios'
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
             <div className=" w-full md:w-[33rem] flex justify-center items-center">
                 <div className="bg-white w-full rounded-lg shadow-md p-10">
                     <div className="flex items-center gap-2 h-auto">
-                        <span className="bg-[#55A96D] rounded-xl h-5 p-1"></span>
+                        <span className="bg-[#3a35c4] rounded-xl h-5 p-1"></span>
                         <p className="font-semibold text-xl">Welcome</p>
                     </div>
 
@@ -92,13 +92,7 @@ const Login: React.FC = () => {
                                 }
                             />
 
-                            <label className="flex items-end justify-end mb-4">
-                                <Link to="/forgotPassword">
-                                    <span className="text-sm text-gray-600 underline">
-                                        Forgot Password?
-                                    </span>
-                                </Link>
-                            </label>
+                        
 
                             {/* submit button */}
                             <div className="cursor-pointer">

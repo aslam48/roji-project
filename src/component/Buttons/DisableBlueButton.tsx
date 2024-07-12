@@ -22,10 +22,10 @@ const DisableBlueButton: React.FC<DisableBlueButtonProps> = ({
         onClick={onClick}
         className={`w-full bg-baseColor rounded-lg flex items-center justify-center text-white py-2 ${
           isLoading
-            ? "bg-[#5F9A3A] text-white cursor-not-allowed"
+            ? "bg-[#3a35c4] text-white cursor-not-allowed"
             : disabled
               ? "opacity-40 text-[#808080] cursor-not-allowed"
-              : "bg-[#5F9A3A] text-white hover:bg-opacity-90"
+              : "bg-[#3a35c4] text-white hover:bg-opacity-90"
         }`}
         disabled={disabled || isLoading}
       >
