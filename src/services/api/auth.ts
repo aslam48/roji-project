@@ -17,7 +17,7 @@ export const login = async (
   dispatch: Dispatch<unknown>
 ) => {
   try {
-    const response = await PublicAxios.post('/auth/signin-generator', value)
+    const response = await PublicAxios.post('/auth/signin-collector', value)
     const { token, payload } = response.data
     setToken(token)
     dispatch(

@@ -1,27 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import UploadImgIcon from "../../../assets/uploadInage.svg";
 import CustomInput from "../../../component/Frominput/CustomInput";
+import { useAppSelector } from "../../../redux/Store";
+import { getCollector, personalProfile, profilePic } from "../../../services/api/profile";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { UpdateProfileForm } from "../../../interfaces/postinterface";
+import Spinner from "../../../component/Spinner";
+import { toast } from "react-toastify";
+import { CustomError } from "../../../interfaces/errormessage";
+import { isAxiosError } from 'axios'
+
+
 
 const Profile: React.FC = () => {
-    const handleSubmit = () => { };
+    const [isSaving, setIsSaving] = useState(false);
+    const { id } = useAppSelector((state) => state.Auth);
+    const queryClient = useQueryClient();
+    const [avatar, setAvatar] = useState<File | null>(null);
+
+    const { data, isLoading, isError } = useQuery(['profile', id], () => getCollector(id || ''));
+
+    const mutation = useMutation((updatedProfile: UpdateProfileForm) => personalProfile(updatedProfile), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['profile', id]);
+            toast.success('Profile updated successfully');
+            setIsSaving(false);
+        },
+        onError: (error: any) => {
+            setIsSaving(false);
+            if (isAxiosError(error) && error.response && error.response.data && (error.response.data as CustomError).message) {
+                toast.error((error.response.data as CustomError).message);
+            } else {
+                toast.error('Network Error, please try again');
+            }
+        }
+    });
+
+    const handleSubmit = (values: UpdateProfileForm) => {
+        setIsSaving(true);
+        mutation.mutate(values);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spinner />
+            </div>
+        );
+    }
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            setAvatar(event.target.files[0]);
+        }
+    };
+    
+
+    const handleSubmitData = async (values: UpdateProfileForm) => {
+        setIsSaving(true);
+        // If avatar is selected, upload it first
+        if (avatar) {
+            const formData = new FormData();
+            formData.append('avatar', avatar);
+
+            try {
+                await profilePic(formData);
+            } catch (error) {
+                console.error('Failed to upload avatar:', error);
+                toast.error('Failed to upload avatar');
+                setIsSaving(false);
+                return;
+            }
+        }
+
+        // Then proceed to update profile details
+        mutation.mutate(values);
+    };
+
+
+    if (isError) return <div>Error loading profile data</div>;
+
+    const initialValues: UpdateProfileForm = {
+        firstName: data?.payload?.personalProfile?.firstName || "",
+        lastName: data?.payload?.personalProfile?.lastName || "",
+        middleName: data?.payload?.personalProfile?.middleName || "",
+        gender: data?.payload?.personalProfile?.gender || "",
+        phoneNumber: data?.payload?.phoneNumber || "",
+        address: data?.payload?.address || "",
+        DOB: data?.payload?.personalProfile?.DOB || ""
+    };
 
     return (
-
-        <main className="flex justify-between w-full flex-1">
+        <main className="flex justify-between w-full flex-1 md:p-10">
             <div className="flex flex-col w-full flex-grow">
-                <div className="bg-white rounded-lg my-10 w-full p-5">
+                <div className="bg-white rounded-lg my-10 w-full p-3">
                     <Formik
-                        initialValues={{
-                            firstName: "",
-                            lastName: "",
-                            middleName: "",
-                            gender: "",
-                            phoneNumber: "",
-                            address: "",
-                            DOB: ""
-                        }}
+                        initialValues={initialValues}
                         onSubmit={handleSubmit}
+                        enableReinitialize
                     >
                         {({ values, handleChange, handleSubmit }) => (
                             <Form onSubmit={handleSubmit}>
@@ -39,25 +116,26 @@ const Profile: React.FC = () => {
                                                 <label
                                                     htmlFor="image"
                                                     className="text-[#5F9A3A] font-semibold"
-                                               >
+                                                >
                                                     Change Photo
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex justify-center items-center flex-grow">
-                                        <img
-                                            src="https://www.kenjap.co.ke/wp-content/uploads/2018/11/Neik-431x428.png"
-                                            alt="Profile"
-                                            className="w-[120px] h-[120px] rounded-full object-cover"
-                                        />
-                                        <input
-                                            type="file"
-                                            id="image"
-                                            name="image"
-                                            accept=".jpg, .png, .jpeg"
-                                            className="hidden"
-                                        />
+                                     <div className="flex justify-center items-center flex-grow">
+                                        {avatar ? (
+                                            <img
+                                                src={URL.createObjectURL(avatar)}
+                                                alt="Selected Avatar"
+                                                className="w-[120px] h-[120px] rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            <img
+                                                src="https://www.kenjap.co.ke/wp-content/uploads/2018/11/Neik-431x428.png"
+                                                alt="Profile"
+                                                className="w-[120px] h-[120px] rounded-full object-cover"
+                                            />
+                                        )}
                                     </div>
                                 </div>
 
@@ -72,16 +150,20 @@ const Profile: React.FC = () => {
                                         <div className="flex gap-2 items-center py-1 text-center px-2">
                                             <button
                                                 type="submit"
-                                                className="text-[#5F9A3A] border border-[#5F9A3A] font-semibold rounded-md p-2 w-[8rem]"
+                                                className="text-[#5F9A3A] border border-[#5F9A3A] font-semibold rounded-md p-2 w-[8rem] relative"
+                                                disabled={isSaving}
                                             >
-                                                {/* <div className="flex justify-center items-center">
-                            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#5F9A3A] mr-2"></div>
-                            <span className="sr-only">Loading...</span>
-                          </div> */}
-
-                                                <p className="font-semibold">Save</p>
+                                                {isSaving && (
+                                                    <div className="absolute top-[50%] left-[50%] transform translate[-50%,-50%]">
+                                                        <div className="spinner-border spinner-border-sm text-light" role="status">
+                                                            <span className="sr-only">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <p className="font-semibold">{isSaving ? 'Saving...' : 'Save'}</p>
                                             </button>
                                         </div>
+
                                     </div>
 
                                     <div className="w-full md:w-[50%]">
@@ -150,7 +232,6 @@ const Profile: React.FC = () => {
                                                         { value: 'male', label: 'Male' },
                                                         { value: 'female', label: 'Female' }
                                                     ]}
-
                                                 />
                                                 <ErrorMessage
                                                     name="gender"
@@ -188,7 +269,7 @@ const Profile: React.FC = () => {
                                                     onChange={handleChange}
                                                 />
                                                 <ErrorMessage
-                                                    name="Address"
+                                                    name="address"
                                                     component="div"
                                                     className="text-red-500"
                                                 />
