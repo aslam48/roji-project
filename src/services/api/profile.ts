@@ -28,7 +28,7 @@ export const personalProfile = async (formData: UpdateProfileForm) => {
 
   export const profilePic = async (formData: FormData) => {
     try {
-        const response = await AuthAxios.put('collector/upload-avatar', formData); // Adjust endpoint as per your API
+        const response = await AuthAxios.put('collector/personal-profile', formData); // Adjust endpoint as per your API
         return response.data;
     } catch (error) {
         console.error(error);

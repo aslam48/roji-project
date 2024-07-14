@@ -10,6 +10,7 @@ import Spinner from "../../../component/Spinner";
 import { toast } from "react-toastify";
 import { CustomError } from "../../../interfaces/errormessage";
 import { isAxiosError } from 'axios'
+import { Link } from "react-router-dom";
 
 
 
@@ -17,7 +18,7 @@ const Profile: React.FC = () => {
     const [isSaving, setIsSaving] = useState(false);
     const { id } = useAppSelector((state) => state.Auth);
     const queryClient = useQueryClient();
-    const [avatar, setAvatar] = useState<File | null>(null);
+    // const [avatar, setAvatar] = useState<File | null>(null);
 
     const { data, isLoading, isError } = useQuery(['profile', id], () => getCollector(id || ''));
 
@@ -50,12 +51,12 @@ const Profile: React.FC = () => {
         );
     }
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            setAvatar(event.target.files[0]);
-        }
-    };
-    
+    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (event.target.files && event.target.files[0]) {
+    //         setAvatar(event.target.files[0]);
+    //     }
+    // };
+
 
     // const handleSubmitData = async (values: UpdateProfileForm) => {
     //     setIsSaving(true);
@@ -101,7 +102,7 @@ const Profile: React.FC = () => {
                     >
                         {({ values, handleChange, handleSubmit }) => (
                             <Form onSubmit={handleSubmit}>
-                                <div className="flex md:gap-64">
+                                {/* <div className="flex md:gap-64">
                                     <div className="flex gap-1 items-start">
                                         <div className="flex flex-col gap-2">
                                             <p className="text-lg md:text-[22px] font-semibold">
@@ -146,9 +147,9 @@ const Profile: React.FC = () => {
                                             onChange={handleFileChange}
                                         />
                                     </div>
-                                </div>
+                                </div> */}
 
-                                <div className="border-t p-4 mt-5 border-[#E4E7EC] flex flex-col md:flex-row items-start md:items-center justify-between w-full">
+                                <div className="p-1 border-[#E4E7EC] flex flex-col md:flex-row items-start md:items-center justify-between w-full">
                                     <div className="flex flex-col gap-2 mb-5 md:mb-0">
                                         <p className="text-lg md:text-[22px] font-semibold">
                                             Personal Information
@@ -305,6 +306,28 @@ const Profile: React.FC = () => {
                             </Form>
                         )}
                     </Formik>
+
+                    <div className="flex justify-center items-center mt-10 md:mt-20">
+                <Link to="/dashboard">
+                    <button className="mt-5 px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 flex items-center">
+                        {/* Back arrow icon */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M7.293 4.293a1 1 0 011.414 0L14 10.586V7a1 1 0 112 0v6a1 1 0 01-1 1h-8a1 1 0 01-1-1v-3a1 1 0 112 0v2.586L14.707 5.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        Back To Dashboard
+                    </button>
+                </Link>
+            </div>
                 </div>
             </div>
         </main>

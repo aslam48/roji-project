@@ -46,7 +46,7 @@ const Login: React.FC = () => {
 
     const { formik } = useLoginForm({ onSubmit: handleLogin })
     return (
-        <main className='flex justify-center items-center h-screen md:p-0 p-4'>
+        <main className='flex justify-center items-center min-h-screen md:p-0 p-4'>
             <div className=" w-full md:w-[33rem] flex justify-center items-center">
                 <div className="bg-white w-full rounded-lg shadow-md p-10">
                     <div className="flex items-center gap-2 h-auto">
