@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
-import UploadImgIcon from "../../../assets/uploadInage.svg";
 import CustomInput from "../../../component/Frominput/CustomInput";
 import { useAppSelector } from "../../../redux/Store";
 import { getCollector, personalProfile } from "../../../services/api/profile";
