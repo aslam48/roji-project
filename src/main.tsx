@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ModalProvider } from "./utils/Modals/ModalsContext.tsx";
 import { BrowserRouter } from 'react-router-dom';
+import MainComponent from './component/LogOutModal/MainComponent.tsx';
 
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <ModalProvider>
               <App />
+              <MainComponent />
               <ToastContainer />
             </ModalProvider>
           </BrowserRouter>
